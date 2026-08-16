@@ -1,0 +1,15 @@
+{
+    "name": "coastal-water-level-tracker",
+    "version": "0.1.0",
+    "type": "module",
+    "description": "Real-time NOAA tide station readings (water level, temperature, pressure) via the official CO-OPS API.",
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "dependencies": {
+        "apify": "^3.2.6"
+    },
+    "scripts": {
+        "start": "node src/main.js"
+    }
+}
