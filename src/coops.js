@@ -8,10 +8,53 @@ const PRODUCT_CODES = {
     airPressure: 'air_pressure',
 };
 
+const REQUEST_TIMEOUT_MS = 25_000;
+const MAX_ATTEMPTS = 4;
+const TRANSIENT_STATUSES = new Set([429, 500, 502, 503, 504]);
+
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Neither NOAA call had a timeout or retry, so a hang or a transient NOAA
+ * hiccup (the CO-OPS API has no uptime SLA) crashed the whole run instantly
+ * with no way to recover. Same defensive pattern already used for crt.sh
+ * (certificate-transparency-monitor) and CPSC (consumer-product-recall-tracker)
+ * elsewhere in this portfolio: an AbortController-based per-attempt timeout so
+ * a hung connection can't block forever, plus retry-with-backoff on both
+ * thrown network errors and transient status codes.
+ */
+async function fetchWithRetry(url) {
+    let lastError;
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+        try {
+            const res = await fetch(url, { headers: { Connection: 'close' }, signal: controller.signal });
+            if (res.ok) return res;
+            if (!TRANSIENT_STATUSES.has(res.status)) {
+                throw new Error(`NOAA request failed: ${res.status} ${res.statusText}`);
+            }
+            lastError = new Error(`NOAA request failed: ${res.status} ${res.statusText}`);
+        } catch (err) {
+            lastError = err.name === 'AbortError'
+                ? new Error(`NOAA request timed out after ${REQUEST_TIMEOUT_MS}ms`)
+                : err;
+        } finally {
+            clearTimeout(timeoutId);
+        }
+        if (attempt < MAX_ATTEMPTS) await sleep(1000 * 2 ** (attempt - 1));
+    }
+    throw lastError;
+}
+
 async function fetchStationsForState(state) {
-    const res = await fetch(`${STATIONS_URL}?type=waterlevels`, { headers: { Connection: 'close' } });
-    if (!res.ok) throw new Error(`NOAA station list request failed: ${res.status} ${res.statusText}`);
+    const res = await fetchWithRetry(`${STATIONS_URL}?type=waterlevels`);
     const body = await res.json();
+    if (!Array.isArray(body.stations)) {
+        throw new Error('NOAA station list response missing "stations" array');
+    }
     return body.stations.filter((s) => s.state === state.toUpperCase());
 }
 
@@ -26,8 +69,14 @@ async function fetchReading(stationId, productCode) {
     url.searchParams.set('format', 'json');
     if (productCode === 'water_level') url.searchParams.set('datum', 'MLLW');
 
-    const res = await fetch(url, { headers: { Connection: 'close' } });
-    if (!res.ok) return null;
+    let res;
+    try {
+        res = await fetchWithRetry(url);
+    } catch {
+        // Preserve the original "no reading available for this station" behavior:
+        // skip it and keep going rather than failing the whole run over one station.
+        return null;
+    }
     const body = await res.json();
     const point = body.data?.[0];
     if (!point) return null;
