@@ -1,0 +1,53 @@
+{
+    "actorSpecification": 1,
+    "fields": {},
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": [
+                    "stationId",
+                    "stationName",
+                    "latitude",
+                    "longitude",
+                    "product",
+                    "value",
+                    "time"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "stationId": {
+                        "label": "Station ID",
+                        "format": "text"
+                    },
+                    "stationName": {
+                        "label": "Station name",
+                        "format": "text"
+                    },
+                    "latitude": {
+                        "label": "Latitude",
+                        "format": "number"
+                    },
+                    "longitude": {
+                        "label": "Longitude",
+                        "format": "number"
+                    },
+                    "product": {
+                        "label": "Product",
+                        "format": "text"
+                    },
+                    "value": {
+                        "label": "Value",
+                        "format": "number"
+                    },
+                    "time": {
+                        "label": "Time",
+                        "format": "text"
+                    }
+                }
+            }
+        }
+    }
+}
