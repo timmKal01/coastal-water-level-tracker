@@ -7,7 +7,9 @@
             "title": "State",
             "type": "string",
             "editor": "textfield",
-            "description": "Two-letter US state code to survey all tide stations in, e.g. \"CA\", \"NY\", \"FL\". Ignored if \"stationId\" is set."
+            "description": "Two-letter US state code to survey all tide stations in, e.g. \"CA\", \"NY\", \"FL\". Ignored if \"stationId\" is set.",
+            "prefill": "CA",
+            "default": "CA"
         },
         "stationId": {
             "title": "Station ID",
