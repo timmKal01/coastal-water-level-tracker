@@ -1,15 +1,28 @@
-# Coastal Water Level Tracker — NOAA Tide Station Data
+# Tide & Coastal Water Level Data: NOAA Stations
 
-Get real-time readings from NOAA's coastal and Great Lakes tide
-stations — water level, water temperature, air temperature, or air
-pressure — by state or specific station ID.
+Current tide and water level readings for U.S. coasts and the Great Lakes,
+for port operations, shipping, marine businesses and coastal engineering
+teams. Pick a state or specific stations and get the latest official NOAA
+reading from each tide station: water level, water temperature, air
+temperature or air pressure.
 
-Built for port operations, marine/boating use, and coastal engineering
-teams who need current tidal conditions, not a forecast. This is the
-coastal counterpart to [River Water Level
+## What you get
+
+One row per tide station:
+
+- Station name, ID and coordinates
+- The latest reading for the measurement you picked, with its time
+- Water levels in feet against the standard NOAA tidal datum (Mean Lower Low Water)
+
+## Who this is for
+
+- **Port and terminal operations** checking current water levels before vessel movements.
+- **Marine businesses and boating operators** whose work depends on the tide.
+- **Coastal engineering and construction teams** who need current tidal conditions, not a forecast.
+
+For inland rivers and streams, see [River Level
 Tracker](https://github.com/timmKal01/river-water-level-tracker), which
-covers inland streams and rivers via USGS instead — different agency,
-different phenomenon (tidal vs. riverine), different audience.
+uses USGS gauges instead.
 
 ## Input
 

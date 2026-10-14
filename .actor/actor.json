@@ -2,7 +2,7 @@
     "actorSpecification": 1,
     "name": "coastal-water-level-tracker",
     "title": "Tide & Coastal Water Level Data: NOAA Stations",
-    "description": "Get real-time water level, water temperature, air temperature, or air pressure readings from NOAA coastal and Great Lakes tide stations, by state or specific station ID.",
+    "description": "Current tide and water level readings from official NOAA coastal and Great Lakes stations, by state or station ID: water level, water temperature, air temperature or air pressure. For port operations, shipping, marine businesses and coastal engineering teams.",
     "version": "0.1",
     "meta": {
         "templateId": "custom-no-proxy"
