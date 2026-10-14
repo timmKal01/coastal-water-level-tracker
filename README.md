@@ -21,7 +21,7 @@ One row per tide station:
 - **Coastal engineering and construction teams** who need current tidal conditions, not a forecast.
 
 For inland rivers and streams, see [River Level
-Tracker](https://github.com/timmKal01/river-water-level-tracker), which
+Tracker](https://apify.com/m_ctim/river-water-level-tracker), which
 uses USGS gauges instead.
 
 ## Input
@@ -81,4 +81,4 @@ the search returns 0 stations or 100.
 
 ## Related products
 
-- [River Water Level Tracker](https://github.com/timmKal01/river-water-level-tracker) — the inland/USGS equivalent for streams and rivers
+- [River Level Tracker](https://apify.com/m_ctim/river-water-level-tracker): the inland/USGS equivalent for streams and rivers
