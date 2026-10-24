@@ -1,3 +1,7 @@
+// Some public APIs refuse requests that identify themselves only as Node's default "node" user agent (data.cms.gov
+// started doing so in October 2026), so every request says which tool is asking and where to find it.
+const USER_AGENT = 'coastal-water-level-tracker/0.1 (+https://apify.com/m_ctim/coastal-water-level-tracker)';
+
 const DATA_URL = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter';
 const STATIONS_URL = 'https://api.tidesandcurrents.noaa.gov/mdapi/prod/webapi/stations.json';
 
@@ -31,7 +35,7 @@ async function fetchWithRetry(url) {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
         try {
-            const res = await fetch(url, { headers: { Connection: 'close' }, signal: controller.signal });
+            const res = await fetch(url, { headers: { 'User-Agent': USER_AGENT, Connection: 'close' }, signal: controller.signal });
             if (res.ok) return res;
             if (!TRANSIENT_STATUSES.has(res.status)) {
                 throw new Error(`NOAA request failed: ${res.status} ${res.statusText}`);
